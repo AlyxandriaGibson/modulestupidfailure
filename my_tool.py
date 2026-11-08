@@ -12,6 +12,8 @@ class FAQKnowledgeBase:
     def find_topic(self, text):
         """Return the first known topic found in the message text, or None."""
         text_lower = text.lower()
+        if "policy" in text_lower or "policies" in text_lower:
+            return "warranty"
         for topic in self.faq_data:
             if topic.lower() in text_lower:
                 return topic

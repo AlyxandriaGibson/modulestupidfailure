@@ -3,6 +3,9 @@
 
 from my_assistant import FAQAssistant
 from my_tool import FAQKnowledgeBase
+import my_tool
+print(my_tool.__file__)
+from ollama_model import OllamaModel
 
 FAQ_DATA = {
     "hours": "We are open from 9 AM - 5 PM, Monday through Friday.",
@@ -10,12 +13,17 @@ FAQ_DATA = {
     "warranty": "We offer a 1-year warranty on all products.",
 }
 
+INSTRUCTIONS = """You are Bizzy, a helpful customer service assistant for Tampa Outfitters.
+Answer in one short sentence.
+Store hours are 9 AM to 5 PM, Monday through Friday.
+Standard shipping takes 3-5 business days, and is free on orders over $60.
+Store policy offers a 1-year warranty on all products.
+Only state facts in these instructions.
+If you do not know the answer, say you do not know and offer to pass the customer to a human agent."""
+
 faq_tool = FAQKnowledgeBase(FAQ_DATA)
-assistant = FAQAssistant(
-    "Bizzy",
-    "You are a helpful and friendly customer service assistant answering general FAQ inquiries for Tampa Outfitters.",
-    faq_tool,
-)
+model = OllamaModel("granite4.1:3b")
+assistant = FAQAssistant("Bizzy", INSTRUCTIONS, faq_tool, model)
 
 print("Type a message, or type quit to stop.")
 user_message = input("You: ")
